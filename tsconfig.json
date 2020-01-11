@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "target": "es5",    // 出力するJavaScriptは、ES5で解釈できるよう出力
+        "module": "es2015", // 出力するJavaScriptは、ES Modules形式として出力
+        "jsx": "react",
+        "noImplicitAny": true,
+        "lib": [
+            "ES2019",
+            "DOM"
+        ]
+    }
+}
