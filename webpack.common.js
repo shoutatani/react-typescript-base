@@ -1,11 +1,19 @@
+const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
+
 module.exports = {
-  entry: "./src/index.tsx",
+  entry: {
+    global: "./src/index.tsx",
+  },
   output: {
-    path: `${__dirname}/dist`,
-    filename: "main.js"
+    path: path.resolve(__dirname, "./dist/assets"),
+    publicPath: "/assets/",
+    filename: "[name].js"
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".tsx", ".ts", ".js", ".json"]
   },
   module: {
     rules: [
@@ -17,8 +25,56 @@ module.exports = {
           }
         ]
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // "style-loader",
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+              importLoaders: 2
+            }
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              sourceMap: true,
+              plugins: [
+                require("autoprefixer")({
+                  grid: true
+                })
+              ]
+            }
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true
+            }
+          },
+        ]
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: {
+          loader: "file-loader",
+          options: {
+            outputPath: './images',
+          },
+        }
+      },
     ]
   },
+
+  plugins: [
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
+    new CopyPlugin([
+      { from: 'src/index.html', to: '../'},
+    ]),
+  ]
 
   // When importing a module whose path matches one of the following, just
   // assume a corresponding global variable exists and use that instead.
