@@ -71,9 +71,11 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
-    new CopyPlugin([
-      { from: 'src/index.html', to: '../'},
-    ]),
+    new CopyPlugin({
+      patterns: [
+        { from: 'src/index.html', to: '../' },
+      ]
+    }),
   ]
 
   // When importing a module whose path matches one of the following, just
